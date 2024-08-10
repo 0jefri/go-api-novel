@@ -57,6 +57,23 @@ func (e *NovelController) listHandler(c *gin.Context) {
 	})
 }
 
+func (e *NovelController) getHandler(c *gin.Context) {
+	id := c.Param("id")
+	novel, err := e.useCase.GetById(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"status":  http.StatusOK,
+		"message": "Success Get Novel By Id",
+		"data":    novel,
+	})
+	return
+}
+
 func NewNovelController(router *gin.Engine, nvlUseCase usecase.NovelUsecase) {
 	ctr := &NovelController{
 		router:  router,
@@ -66,4 +83,5 @@ func NewNovelController(router *gin.Engine, nvlUseCase usecase.NovelUsecase) {
 	routerGroup := ctr.router.Group("api/v1")
 	routerGroup.POST("/novel", ctr.createHandler)
 	routerGroup.GET("/novel", ctr.listHandler)
+	routerGroup.GET("/novel/:id", ctr.getHandler)
 }

@@ -9,6 +9,7 @@ import (
 type NovelUsecase interface {
 	RegisterNewNovel(payload model.Novel) error
 	FindAllNovels() ([]model.Novel, error)
+	GetById(id string) (model.Novel, error)
 }
 
 type novelUsecase struct {
@@ -32,6 +33,10 @@ func (e *novelUsecase) FindAllNovels() ([]model.Novel, error) {
 		return nil, err
 	}
 	return novels, nil
+}
+
+func (e *novelUsecase) GetById(id string) (model.Novel, error) {
+	return e.repo.Get(id)
 }
 
 func NewNovelUsecase(nvlRepo repository.NovelRepository) NovelUsecase {

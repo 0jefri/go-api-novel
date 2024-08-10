@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"fmt"
 	"go-novel-api/model"
 	"go-novel-api/utils/constant"
 )
@@ -39,6 +40,15 @@ func (e *novelRepository) List() ([]model.Novel, error) {
 		novels = append(novels, novel)
 	}
 	return novels, nil
+}
+
+func (e *novelRepository) Get(id string) (model.Novel, error) {
+	var novel model.Novel
+	err := e.db.QueryRow(constant.GET_NOVEL_ID, id).Scan(&novel.Id, &novel.Judul, &novel.Penerbit, &novel.TahunTerbit, &novel.Penulis)
+	if err != nil {
+		return model.Novel{}, fmt.Errorf("Repo: Error Get Novel: %s", err.Error())
+	}
+	return novel, nil
 }
 
 func NewNovelRepository(db *sql.DB) NovelRepository {
