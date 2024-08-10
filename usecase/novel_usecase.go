@@ -8,6 +8,7 @@ import (
 
 type NovelUsecase interface {
 	RegisterNewNovel(payload model.Novel) error
+	FindAllNovels() ([]model.Novel, error)
 }
 
 type novelUsecase struct {
@@ -23,6 +24,14 @@ func (e *novelUsecase) RegisterNewNovel(payload model.Novel) error {
 		return fmt.Errorf("Failed to create novel: %s", err.Error())
 	}
 	return nil
+}
+
+func (e *novelUsecase) FindAllNovels() ([]model.Novel, error) {
+	novels, err := e.repo.List()
+	if err != nil {
+		return nil, err
+	}
+	return novels, nil
 }
 
 func NewNovelUsecase(nvlRepo repository.NovelRepository) NovelUsecase {

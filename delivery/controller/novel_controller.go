@@ -37,6 +37,26 @@ func (e *NovelController) createHandler(c *gin.Context) {
 	})
 }
 
+func (e *NovelController) listHandler(c *gin.Context) {
+	// judul := c.Query("judul")
+	// penerbit := c.Query("penerbit")
+	// tahunTerbit := c.Query("tahunTerbit")
+	// penulis := c.Query("penulis")
+	novels, err := e.useCase.FindAllNovels()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	status := map[string]any{
+		"code":    200,
+		"message": "Get All Data Successfully",
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"status": status,
+		"data":   novels,
+	})
+}
+
 func NewNovelController(router *gin.Engine, nvlUseCase usecase.NovelUsecase) {
 	ctr := &NovelController{
 		router:  router,
@@ -45,4 +65,5 @@ func NewNovelController(router *gin.Engine, nvlUseCase usecase.NovelUsecase) {
 
 	routerGroup := ctr.router.Group("api/v1")
 	routerGroup.POST("/novel", ctr.createHandler)
+	routerGroup.GET("/novel", ctr.listHandler)
 }
