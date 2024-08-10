@@ -36,9 +36,17 @@ func Server() *appServer {
 		log.Fatalln(err.Error())
 	}
 	dbConn, _ := config.NewDbConnection(cfg)
+	// dbConn, err := config.NewDbConnection(cfg)
+	// if err != nil {
+	// 	log.Fatalln("Failed to initialize database connection:", err)
+	// }
+
+	// if dbConn.Conn() == nil {
+	// 	log.Fatalln("Database connection is nil")
+	// }
 	nvlRepo := repository.NewNovelRepository(dbConn.Conn())
 	nvlUseCase := usecase.NewNovelUsecase(nvlRepo)
-	host := fmt.Sprintf("%s : %s", cfg.ApiHost, cfg.ApiPort)
+	host := fmt.Sprintf("%s:%s", cfg.ApiHost, cfg.ApiPort)
 
 	return &appServer{
 		engine:     engine,

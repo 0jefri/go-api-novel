@@ -6,4 +6,4 @@ CREATE TABLE novel (
   penerbit varchar(100),
   tahun_terbit varchar(20),
   penulis varchar(100)
-)
+);
