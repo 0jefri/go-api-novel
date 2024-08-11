@@ -51,6 +51,14 @@ func (e *novelRepository) Get(id string) (model.Novel, error) {
 	return novel, nil
 }
 
+func (e *novelRepository) Update(payload model.Novel) error {
+	_, err := e.db.Exec(constant.NOVEL_UPDATE, payload.Judul, payload.Penerbit, payload.TahunTerbit, payload.Penulis, payload.Id)
+	if err != nil {
+		return fmt.Errorf("Error Update Novel: %s", err.Error())
+	}
+	return nil
+}
+
 func NewNovelRepository(db *sql.DB) NovelRepository {
 	return &novelRepository{
 		db: db,
