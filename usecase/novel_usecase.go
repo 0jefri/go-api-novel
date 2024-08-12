@@ -11,6 +11,7 @@ type NovelUsecase interface {
 	FindAllNovels() ([]model.Novel, error)
 	GetById(id string) (model.Novel, error)
 	UpdateNovel(payload model.Novel) error
+	DeleteNovel(id string) error
 }
 
 type novelUsecase struct {
@@ -46,6 +47,14 @@ func (e *novelUsecase) UpdateNovel(payload model.Novel) error {
 		return err
 	}
 	return e.repo.Update(payload)
+}
+
+func (e *novelUsecase) DeleteNovel(id string) error {
+	_, err := e.GetById(id)
+	if err != nil {
+		return err
+	}
+	return e.repo.Delete(id)
 }
 
 func NewNovelUsecase(nvlRepo repository.NovelRepository) NovelUsecase {

@@ -89,6 +89,21 @@ func (e *NovelController) UpdateHandler(c *gin.Context) {
 	})
 }
 
+func (e *NovelController) DeleteHandler(c *gin.Context) {
+	var novel model.Novel
+	if err := c.ShouldBindJSON(&novel); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  http.StatusOK,
+		"message": "Success delete novel",
+	})
+}
+
 func NewNovelController(router *gin.Engine, nvlUseCase usecase.NovelUsecase) {
 	ctr := &NovelController{
 		router:  router,
@@ -100,4 +115,5 @@ func NewNovelController(router *gin.Engine, nvlUseCase usecase.NovelUsecase) {
 	routerGroup.GET("/novel", ctr.listHandler)
 	routerGroup.GET("/novel/:id", ctr.getHandler)
 	routerGroup.PUT("/novel", ctr.UpdateHandler)
+	routerGroup.DELETE("/novel/:id", ctr.DeleteHandler)
 }

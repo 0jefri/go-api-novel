@@ -59,6 +59,14 @@ func (e *novelRepository) Update(payload model.Novel) error {
 	return nil
 }
 
+func (e *novelRepository) Delete(id string) error {
+	_, err := e.db.Exec(constant.NOVEL_DELETE, id)
+	if err != nil {
+		return fmt.Errorf("repo: Error delete novel: %s", err.Error())
+	}
+	return nil
+}
+
 func NewNovelRepository(db *sql.DB) NovelRepository {
 	return &novelRepository{
 		db: db,
