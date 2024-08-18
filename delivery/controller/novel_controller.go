@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"go-novel-api/model"
 	"go-novel-api/usecase"
 	"go-novel-api/utils/common"
@@ -76,11 +77,19 @@ func (e *NovelController) getHandler(c *gin.Context) {
 
 func (e *NovelController) UpdateHandler(c *gin.Context) {
 	var novel model.Novel
+	fmt.Println("abcdcdcd")
 	if err := c.ShouldBindJSON(&novel); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
 		return
+	}
+	err := e.useCase.UpdateNovel(novel)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "error update novel",
+			"error":   err.Error(),
+		})
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
