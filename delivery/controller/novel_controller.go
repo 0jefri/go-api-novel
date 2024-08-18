@@ -99,12 +99,19 @@ func (e *NovelController) UpdateHandler(c *gin.Context) {
 }
 
 func (e *NovelController) DeleteHandler(c *gin.Context) {
+	id := c.Param("id")
 	var novel model.Novel
 	if err := c.ShouldBindJSON(&novel); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
 		return
+	}
+	err := e.useCase.DeleteNovel(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"err": err.Error(),
+		})
 	}
 
 	c.JSON(http.StatusOK, gin.H{
