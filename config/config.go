@@ -3,7 +3,8 @@ package config
 import (
 	"fmt"
 	"os"
-	// "go-novel-api/utils/common"
+
+	"go-novel-api/utils/common"
 )
 
 type ApiConfig struct {
@@ -26,10 +27,10 @@ type Config struct {
 }
 
 func (c *Config) ReadConfig() error {
-	// err := common.LoadEnv()
-	// if err != nil {
-	// 	return err
-	// }
+	err := common.LoadEnv()
+	if err != nil {
+		return err
+	}
 	c.DbConfig = DbConfig{
 		Host:     os.Getenv("DB_HOST"),
 		Port:     os.Getenv("DB_PORT"),
